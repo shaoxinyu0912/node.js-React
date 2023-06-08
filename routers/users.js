@@ -47,8 +47,23 @@ Routers.get("/customer/:id", jwtCheck, (req, res) => {
       res.status(400).json({ errcode: 1001 });
     });
 });
+
+//更新用户个人信息
+Routers.patch("/customer/:id", jwtCheck, (req, res) => {
+  const { id } = req.params;
+  UserSchema.updateOne({ _id: id }, req.body)
+    .then(() => {
+      UserSchema.findById({ _id: id }).then((data) => {
+        res.json({ errmsg: "success", data, errcode: 0 });
+      });
+    })
+    .catch(() => {
+      res.status(400).json({ errcode: 1001, data: null });
+    });
+});
+
 // 删除单个数据信息
-Routers.delete("/customer/:id", (req, res) => {
+Routers.delete("/customer/:id", jwtCheck, (req, res) => {
   UserSchema.deleteOne({ _id: req.params.id })
     .then((data) => {
       res.json({ errmsg: "success", data, errcode: 0 });
