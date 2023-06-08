@@ -3,7 +3,7 @@ const { JWT_KEY } = require("../config/config");
 
 // 生成token函数
 const jwtSign = (data) => {
-  const token = jwt.sign(data, JWT_KEY, { expiresIn: 60 * 60 }); // 一个小时
+  const token = jwt.sign(data, JWT_KEY, { expiresIn: 60 * 60 * 24 * 1000 }); // 一天过期
   return token;
 };
 
