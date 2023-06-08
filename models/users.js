@@ -8,7 +8,7 @@ const localDate = (v) => {
 const UserSchema = mongoose.Schema({
   email: {
     type: String,
-    require: true,
+    // require: true,
   },
   phone: {
     type: String,
@@ -16,7 +16,7 @@ const UserSchema = mongoose.Schema({
   },
   show_name: {
     type: String,
-    require: true,
+    // require: true,
   },
   created_at: {
     type: Date,
@@ -28,7 +28,7 @@ const UserSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    //   require: true,
+    require: true,
   },
 });
 

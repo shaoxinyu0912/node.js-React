@@ -1,8 +1,10 @@
 const express = require("express");
+const md5 = require("md5");
 const UserSchema = require("../models/users");
+const { jwtCheck } = require("../jwt/jwt");
 const Routers = express.Router();
-
-Routers.get("/customer", (req, res) => {
+// 查询所有用户信息
+Routers.get("/customer", jwtCheck, (req, res) => {
   UserSchema.find()
     .then((data) => {
       res.json({
@@ -17,7 +19,7 @@ Routers.get("/customer", (req, res) => {
 });
 // 注册用户
 Routers.post("/register", (req, res) => {
-  UserSchema.findOne({ email: req.body.email }).then((user) => {
+  UserSchema.findOne({ phone: req.body.phone }).then((user) => {
     if (user) {
       return res.status(400).json({ msg: "注册邮箱已经存在" });
     } else {
@@ -25,7 +27,7 @@ Routers.post("/register", (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         show_name: req.body.show_name,
-        password: req.body.password,
+        password: md5(req.body.password),
       });
       newUser
         .save()
@@ -34,7 +36,26 @@ Routers.post("/register", (req, res) => {
     }
   });
 });
-// Routers.patch("/", (req, res) => {});
-// Routers.delete("/", (req, res) => {});
+
+// 查询单个数据信息
+Routers.get("/customer/:id", jwtCheck, (req, res) => {
+  UserSchema.findById({ _id: req.params.id })
+    .then((data) => {
+      res.json({ errmsg: "success", data, errcode: 0 });
+    })
+    .catch(() => {
+      res.status(400).json({ errcode: 1001 });
+    });
+});
+// 删除单个数据信息
+Routers.delete("/customer/:id", (req, res) => {
+  UserSchema.deleteOne({ _id: req.params.id })
+    .then((data) => {
+      res.json({ errmsg: "success", data, errcode: 0 });
+    })
+    .catch(() => {
+      res.status(400).json({ errcode: 1001 });
+    });
+});
 
 module.exports = Routers;

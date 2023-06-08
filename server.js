@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const { HOST, PORT, NAME } = require("./config/config");
 const users = require("./routers/users");
+const logins = require("./routers/login");
+
 const app = express();
 
 const port = 5000;
@@ -20,7 +22,9 @@ app.use(bodyParser.urlencoded({ extended: false })),
       `${port}数据库连接失败`;
     });
 // 全局挂载用户路由信息
-app.use("/api", users);
+app.use("/api/users", users);
+app.use("/api/login", logins);
+
 app.listen(port, () => {
   console.log(`启动${port}端口成功`);
 });
